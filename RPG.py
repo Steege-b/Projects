@@ -64,8 +64,8 @@ def item_manager():
     if cat == 'armor':  ###Giving stats about armor. asks for armomr class first
         while True:
             sub_cat = input('Head, body, or leg armor? Type \'back\' to go back.')
-            if sub_cat == head_armor:
-                manager_sorter(head_armor)
+            if sub_cat == 'head' or sub_cat == 'head armor':
+                print(manager_sorter(head_armor))
                 head = input('Which piece?').lower()
                 if head == 'bandanna':
                     print('Light armor, +1 CON')
@@ -75,8 +75,8 @@ def item_manager():
                     print('Heavy armor, +1 CON & DEF')
                 else:
                     print('<Enter a valid input>')
-            elif sub_cat == 'body armor':
-                manager_sorter(body_armor)
+            elif sub_cat == 'body' or sub_cat == 'body armor':
+                print(manager_sorter(body_armor))
                 body = input('Which piece?')
                 if body == 'apron':
                     print('Light armor, +2 DEX ')
@@ -87,8 +87,8 @@ def item_manager():
                 else:
                     print('<Enter a valid input>')
 
-            elif sub_cat == 'leg armor':
-                manager_sorter(leg_armor)
+            elif sub_cat == 'leg' or sub_cat == 'leg armor':
+                print(manager_sorter(leg_armor))
                 body = input('Which piece?')
                 if body == 'jeggings':
                     print('Light armor, +2 DEF ')
