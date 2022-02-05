@@ -73,7 +73,7 @@ def item_manager():
                     break
 
                 print('<Enter a valid input>')
-        elif cat == 'armor':  ###Giving stats about armor. asks for armomr class first
+        elif cat == 'armor':  ###Giving stats about armor. asks for armor class first
             cat = ''
             while True:
                 sub_cat = input('Head, body, or leg armor? Type \'back\' to go back.').lower()
@@ -100,7 +100,7 @@ def item_manager():
                     if body == 'jacket':
                         print('Medium armor, +2 STR')
                         continue
-                    if body == 'football pads':
+                    if body == 'football pads' or body == 'pads' or body == 'football':
                         print('Heavy armor, +2 DEF +1 CON ')
                         continue
                     else:
@@ -108,14 +108,14 @@ def item_manager():
 
                 elif sub_cat == 'leg' or sub_cat == 'leg armor':
                     print(manager_sorter(leg_armor))
-                    body = input('Which piece?').lower()
-                    if body == 'jeggings':
+                    leg = input('Which piece?').lower()
+                    if leg == 'jeggings':
                         print('Light armor, +2 DEF ')
                         continue
-                    if body == 'jnco jeans':
+                    if leg == 'jnco jeans' or leg == 'jeans' or leg == 'jnco':
                         print('Medium armor, +2 CON')
                         continue
-                    if body == 'carhart pants ':
+                    if leg == 'carhart pants' or leg == 'pants' or leg == 'carhart':
                         print('Heavy armor, +2 STR +1 DEX ')
                         continue
                     else:
@@ -126,7 +126,7 @@ def item_manager():
                         break
                     else:
                         print('<Enter a valid input>')
-                        continue  ###Giving stats abou
+                        continue  ###Giving stats about
         elif cat == 'exit':
             return ''
         elif cat != 'exit' or cat != 'weapons' or cat != 'armor':
@@ -270,7 +270,6 @@ def player_set():
                     constitution_start = 0
                     defense_start = 0
                     charisma_start = 0
-                    stat_selector()
                     continue
                 else:
                     if r1start + r2start + r3start + r4start + r5start > 0:  ###Player can't back out without all stats bein allocated
@@ -356,7 +355,7 @@ def player_set():
                   f"\nConstitution: {constitution} ({3 * constitution} bonus health)")
             input('<Enter to continue>')
 
-        if type == 'full':  ###These options are for initial imput, selects stat function
+        if type == 'full':  ###These options are for initial input, selects stat function
             player_set_full()
             break
         if type == 'light':
@@ -419,7 +418,8 @@ def fight_loop(modifier):
                'Ammo': current_ammo, 'Distance': distance, 'Stamina': stamina}
         print(f'\n  	    ಠ_ಠ\n    	<|>\n    	/ \\\n O\n<|>\n/ \\\n')
         pretty_dict(hud)
-        move = input('Choices: Attack, block, heal, move back, charge, (Swap) weapons \n<Enter Choice>\n').lower()
+        move = input('Choices: Attack, block (reduces distance by 1), heal, move back, charge, (Swap) weapons'
+                     ' \n<Enter Choice>\n').lower()
         if move == 'swap' or move == 'swap weapons':
             equipped_weapon, secondary = secondary, equipped_weapon
             print(f'You equip your {equipped_weapon}')
@@ -436,6 +436,7 @@ def fight_loop(modifier):
             print('You prepare yourself for an attack!')
             if distance > 1:
                 distance -= 1
+                continue
             elif distance == 1:
                 shield = random.randint(1, 25)
                 sword = random.randint(1, 45)
@@ -484,26 +485,38 @@ def fight_loop(modifier):
                 else:
                     continue
             elif stamina == 3:
-                distance += 3
+                if distance >= 2:
+                    distance += 3
+                elif distance == 1:
+                    distance += 2
                 stamina -= 1
-                input('You dash backwards and feel a bit winded \n<Enter to continue>')
+                print('You dash backwards and feel a bit winded \n<Enter to continue>')
             elif stamina == 2:
-                distance += 3
+                if distance >= 2:
+                    distance += 3
+                elif distance == 1:
+                    distance += 2
                 stamina -= 1
-                input('You dash backwards and feel very winded \n<Enter to continue>')
+                print('You dash backwards and feel very winded \n<Enter to continue>')
             elif stamina == 1:
-                distance += 3
+                if distance >= 2:
+                    distance += 3
+                elif distance == 1:
+                    distance += 2
                 stamina -= 1
-                input('You dash backwards and almost collapse \n<Enter to continue>')
+                print('You dash backwards and almost collapse \n<Enter to continue>')
 
         elif move == 'heal':
-            gained = (random.randint(15, 50) + constitution)
-            hp += gained
-            if hp > 120:
-                hp = 120
-            bandages -= 1
-            print(f'You gained {gained} HP using a bandage. \nNew HP: {hp} \nNew bandage count: {bandages}')
-
+            if bandages > 0:
+                gained = (random.randint(15, 50) + constitution)
+                hp += gained
+                if hp > 120:
+                    hp = 120
+                bandages -= 1
+                print(f'You gained {gained} HP using a bandage. \nNew HP: {hp} \nNew bandage count: {bandages}')
+            else:
+                input('No more bandages!')
+                continue
         elif move == 'attack':
             if equipped_weapon == 'rifle':
                 if distance == 1:
@@ -590,15 +603,15 @@ def fight_loop(modifier):
             input(f'You dealt {damage_given} damage and took {int(damage_taken)} damage! \n<Enter to continue>')
             swap_enemy = enemy_hp - damage_given
             swap_enemy, enemy_hp = enemy_hp, swap_enemy
-            swap_hp = hp - damage_taken
+            swap_hp = hp - int(damage_taken)
             swap_hp, hp = hp, swap_hp
             if hp < 1:
                 input(f'You died. Kills = {kills}')
                 sys.exit()
 
         elif damage_taken > 0:
-            input(f'You took {damage_taken} damage! \n<Enter to continue>')
-            swap_hp = hp - damage_taken
+            input(f'You took {int(damage_taken)} damage! \n<Enter to continue>')
+            swap_hp = hp - int(damage_taken)
             swap_hp, hp = hp, swap_hp
             if hp < 1:
                 input('You died')
@@ -615,8 +628,18 @@ def fight_loop(modifier):
         damage_taken = 0
     if enemy_hp < 1:
         money_up = random.randint(10, 100)
+        ammo_up = random.randint(-3, 7)
+        if ammo_up < 0:
+            ammo_up = 0
+        current_ammo += ammo_up
+        if equipped_weapon == 'shotgun':
+            shotgun_shell_count += ammo_up
+        elif equipped_weapon == 'rifle':
+            rifle_ammo_count += ammo_up
+        elif equipped_weapon == 'pistol':
+            pistol_ammo_count += ammo_up
         money += money_up
-        input(f'You killed the enemy and found ${money_up} on their body.')
+        input(f'You killed the enemy and found ${money_up} and scavenged {ammo_up} bullets off of their body.')
 
 
 def shopping_guns():
@@ -842,15 +865,19 @@ def shopping():
                 tries = 1
                 continue
 
-        if goods == 'heal' or goods == 'heal me':
-            health_up = random.randint(40, 100)
-            hp += health_up
-            money -= healing_cost
-            if hp > 120:
-                hp = 120
-            input(
-                f'I managed to heal you for {health_up} health. Your new HP is {hp} and you have ${money}. \n<Enter to continue>')
-            continue
+        elif goods == 'heal' or goods == 'heal me':
+            if money < healing_cost:
+                health_up = random.randint(40, 100)
+                hp += health_up
+                money -= healing_cost
+                if hp > 120:
+                    hp = 120
+                input(
+                    f'I managed to heal you for {health_up} health. Your new HP is {hp} and you have ${money}. '
+                    f'\n<Enter to continue>')
+                continue
+            else:
+                print('You can\'t afford that')
 
 
         elif goods == 'bandages':
@@ -860,7 +887,6 @@ def shopping():
             if bandage_amount == 'back':
                 continue
             bandage_price = int(bandage_amount) * bandage_cost
-
             if money > int(bandage_price):
                 money -= bandage_price
                 bandages += int(bandage_amount)
@@ -869,7 +895,6 @@ def shopping():
             elif money < int(bandage_price):
                 input(f'Doctor: "You don\'t have that kind of money."')
                 continue
-
         elif goods == 'ammo':
             gun = input('Doctor: "Which weapon?" \n<pistol, rifle, shotgun, or back>\n').lower()
             try:
@@ -879,7 +904,6 @@ def shopping():
                                           f'or enter a number.\n').lower()
                     if pistol_amount == 'back':
                         continue
-
                     pistol_price = (int(pistol_amount) * pistol_ammo_cost)
                     if pistol_price > money:
                         print(f'Doctor: "You can only afford {pistol_cap} pistol rounds."')
@@ -893,7 +917,6 @@ def shopping():
                             money -= pistol_price
                             pistol_ammo_count += int(pistol_amount)
                             input(f'You now have {pistol_ammo_count} pistol rounds and ${money} \n<Enter to continue>')
-
                 elif gun == 'shotgun':
                     shotgun_cap = money // shotgun_shell_cost
                     shotgun_amount = input(f'How many? You can afford {shotgun_cap} \nType \'back\' to go back.'
@@ -1000,16 +1023,16 @@ while True:
           "\n<Wait>")
     seduce = input(f'\nYou are given multiple options to choose from in most encounters.'
                    f' The command to execute the option is listed in <these> at the bottom of your screen.'
-                   f'\nThis character is able to be seduced! When you see the <seduce character> prompt, you can seduce that character.'
-                   f'\nCharisma checks are done by comparing the AI charisma score against yours. You get one die per charisma'
-                   f' level and have to roll the minimum skill check to pass!\n'
-                   f'Skill-checked dialogue options can reveal new items, or choices.Try it now by typing \'seduce\' and pressing enter!\n'
-                   f'<Seduce or wait>\n').lower()
+                   f'\nThis character is able to be seduced! When you see the <seduce character> prompt, you can seduce'
+                   f' that character. \nCharisma checks are done by comparing the AI charisma score against yours. '
+                   f'You get one die per charisma level and have to roll the minimum skill check to pass!\n'
+                   f'Skill-checked dialogue options can reveal new items, or choices.Try it now by typing \'seduce\''
+                   f' and pressing enter! \n<Seduce or wait>\n').lower()
     if seduce == 'seduce':
         check = cha_check(charisma, 3, 'Nurse')
         if check == 'pass':
             input('\nNurse:"I usually don\'t do this but... '
-                  '\n+1 Bandage\n\n')
+                  '\n+1 Bandage\n<Enter to continue>')
             bandages = 1
             break
         else:
@@ -1040,22 +1063,22 @@ while money == 0:
             choice = 'no'
     if choice == 'no':
         print(
-            'Doctor: "Monsters are attacking! You got brought in here with some weapons so I assumed you were supposed to do '
-            'something about that." \n"Here are your things back. Oh, don\'t forget to pay your bills!" \n + $50 ')
+            'Doctor: "Monsters are attacking! You got brought in here with some weapons so I assumed you'
+            ' were supposed to do something about that." \n"Here are your things back. Oh, don\'t forget'
+            ' to pay your bills!" \n + $50 ')
         money = 50
         break
     input('<Enter a valid input>')
 
 print(f'\nDoctor: "Looks here like you came in with...if I could just find them..."')
-print('Your possible weapon choices are', ', '.join(weapon_list[:-1]) + ', or ' + weapon_list[-1])
 input('<Enter to continue>')
 primary_start = ['rifle', 'shotgun', 'pistol', 'pistol', 'rifle', 'pistol', 'pistol', 'rifle']
 equipped_weapon = random.choice(primary_start)
 secondary_start = ['knife', 'knife' 'knife', 'knife', 'knife', 'axe', 'hatchet', 'hatchet', 'hatchet']
 secondary = random.choice(secondary_start)
 print(
-    f'\n\nDoctor: "Hah! Found them! Looks like you had a {equipped_weapon} and {secondary} when you got brought here. Looks like you'
-    f' also had a bag of ammo with you too! all sorts of sizes and shapes!')
+    f'\n\nDoctor: "Hah! Found them! Looks like you had a {equipped_weapon} and {secondary}'
+    f' when you got brought here. \nLooks like you also had a bag of ammo with you too! all sorts of sizes and shapes!')
 pistol_ammo_count = random.randint(10, 25)
 rifle_ammo_count = random.randint(7, 25)
 shotgun_shell_count = random.randint(4, 10)
