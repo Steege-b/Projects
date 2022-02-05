@@ -1,9 +1,11 @@
 import random, sys
+
 weapon_list = ('Rifle', 'Shotgun', 'Pistol', 'Axe', 'Knife', 'Hatchet')
 
 head_armor = ('Bandanna', 'Fedora', 'Hard hat')
 body_armor = ('Apron', 'Jacket', 'Football Pads')
 leg_armor = ('Jeggings', 'JNCO jeans', 'Carhart pants')
+
 
 def crit_calculator(dexterity, damage):  ###Main function used to roll crit chance
 
@@ -20,29 +22,33 @@ def crit_calculator(dexterity, damage):  ###Main function used to roll crit chan
     else:  ###If no crit, pass nothing
         return damage
 
+
 def sorter(list):
     print(', '.join(list[:-1]) + ', and ' + list[
         -1])  ###Print everything before the last item in the list, separated by commas.
+
 
 def pretty_dict(dict):
     for item in dict.items():  ###Prints out a pretty list of our costs.
         key, value = item
         print(f'{key} : {value}')
-        
+
+
 def item_manager():
     def manager_sorter(list):
         info = (', '.join(list[:-1]) + ', or ' + list[
             -1])  ###Print everything before the last item in the list, separated by commas.
         return info
+
     while True:
         cat = input('What category do you want? Type \'Exit\' to quit.'
                     f'\nWeapons'
-                    f'\nArmor\n').lower() ###Getting item category
+                    f'\nArmor\n').lower()  ###Getting item category
         if cat == 'weapons':
             cat = ''
-            while True:###This page displays stats about your selected weapon
+            while True:  ###This page displays stats about your selected weapon
                 weapon = input('Which weapon? Type \'back\' to go back.'
-                               f'\nChoose from one of the following: {manager_sorter(weapon_list)}\n')
+                               f'\nChoose from one of the following: {manager_sorter(weapon_list)}\n').lower()
                 if weapon == 'shotgun':
                     print('The shotgun with buckshot ammo deals 0-7 damage, 10 on headshots, 7 times. it gets added up'
                           ' for a total damage output. The slug rounds in a shotgun will deal 15-40 damage, 50 on a'
@@ -70,7 +76,7 @@ def item_manager():
         elif cat == 'armor':  ###Giving stats about armor. asks for armomr class first
             cat = ''
             while True:
-                sub_cat = input('Head, body, or leg armor? Type \'back\' to go back.')
+                sub_cat = input('Head, body, or leg armor? Type \'back\' to go back.').lower()
                 if sub_cat == 'head' or sub_cat == 'head armor':
                     print(manager_sorter(head_armor))
                     head = input('Which piece?').lower()
@@ -87,7 +93,7 @@ def item_manager():
                         print('<Enter a valid input>')
                 elif sub_cat == 'body' or sub_cat == 'body armor':
                     print(manager_sorter(body_armor))
-                    body = input('Which piece?')
+                    body = input('Which piece?').lower()
                     if body == 'apron':
                         print('Light armor, +2 DEX ')
                         continue
@@ -102,7 +108,7 @@ def item_manager():
 
                 elif sub_cat == 'leg' or sub_cat == 'leg armor':
                     print(manager_sorter(leg_armor))
-                    body = input('Which piece?')
+                    body = input('Which piece?').lower()
                     if body == 'jeggings':
                         print('Light armor, +2 DEF ')
                         continue
@@ -120,7 +126,7 @@ def item_manager():
                         break
                     else:
                         print('<Enter a valid input>')
-                        continue###Giving stats abou
+                        continue  ###Giving stats abou
         elif cat == 'exit':
             return ''
         elif cat != 'exit' or cat != 'weapons' or cat != 'armor':
@@ -131,105 +137,129 @@ def item_manager():
 def player_set():
     global strength, dexterity, charisma, defense, constitution
     while True:
-        type = input('<Auto, light, or full>\n').lower() ###Getting our stat rollers
+        type = input('<Auto, light, or full>\n').lower()  ###Getting our stat rollers
+
         def player_set_full():
             global strength, dexterity, defense, charisma, constitution
-            r1 = random.randint(1, 10)      ###Initializing
-            r2 = random.randint(1, 10)      ###Initializing
-            r3 = random.randint(1, 10)      ###Initializing
-            r4 = random.randint(1, 10)      ###Initializing
-            r5 = random.randint(1, 10)      ###Initializing
-            r1start = r1        ###Initializing
-            r2start = r2        ###Initializing
-            r3start = r3        ###Initializing
-            r4start = r4        ###Initializing
-            r5start = r5        ###Initializing
-            strength_start = 0      ###Initializing
-            dexterity_start = 0     ###Initializing
-            constitution_start = 0      ###Initializing
-            defense_start = 0       ###Initializing
-            charisma_start = 0      ###Initializing
+            r1 = random.randint(1, 10)  ###Initializing
+            r2 = random.randint(1, 10)  ###Initializing
+            r3 = random.randint(1, 10)  ###Initializing
+            r4 = random.randint(1, 10)  ###Initializing
+            r5 = random.randint(1, 10)  ###Initializing
+            r1start = r1  ###Initializing
+            r2start = r2  ###Initializing
+            r3start = r3  ###Initializing
+            r4start = r4  ###Initializing
+            r5start = r5  ###Initializing
+            strength_start = 0  ###Initializing
+            dexterity_start = 0  ###Initializing
+            constitution_start = 0  ###Initializing
+            defense_start = 0  ###Initializing
+            charisma_start = 0  ###Initializing
             while True:
-                print(   ###Initial menu, asks for input
+                print(  ###Initial menu, asks for input
                     f'\nType the name (or the 3 letter abbreviation(STR, DEX, CON, CHA, DEF)) of a stat to add a role to it. Type "Restart" '
                     f'if you make a mistake. Type "Exit" when you are done editing stats.'
                     f'\nYour rolls are {r1start}, {r2start}, {r3start}, {r4start} and {r5start} .')
                 stat = input(
                     f'Strength: {strength_start}     Dexterity: {dexterity_start}     Constitution: {constitution_start}'
                     f'   Defense: {defense_start}    Charisma: {charisma_start}\n').lower()
-                if stat == exit:
-                    break
-                elif stat == 'dexterity' or stat == 'dex':
+
+                if stat == 'dexterity' or stat == 'dex':
                     roll_selector = input('\nWhich roll do you want to put in this stat?\n'
                                           f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}\n').lower()
-                    if roll_selector == 'r1':           ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                        dexterity_start, r1start = r1start, dexterity_start         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                    elif roll_selector == 'r2':         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                        dexterity_start, r2start = r2start, dexterity_start         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                    elif roll_selector == 'r3':         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                        dexterity_start, r3start = r3start, dexterity_start         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                    elif roll_selector == 'r4':         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                        dexterity_start, r4start = r4start, dexterity_start         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                    elif roll_selector == 'r5':         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                        dexterity_start, r5start = r5start, dexterity_start         ###For all of this part: if player wants this roll in this slot then swap variables and display 
-                    continue
+                    if roll_selector == 'r1':  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        dexterity_start, r1start = r1start, dexterity_start  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        continue
+                    elif roll_selector == 'r2':  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        dexterity_start, r2start = r2start, dexterity_start  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        continue
+                    elif roll_selector == 'r3':  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        dexterity_start, r3start = r3start, dexterity_start  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        continue
+                    elif roll_selector == 'r4':  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        dexterity_start, r4start = r4start, dexterity_start  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        continue
+                    elif roll_selector == 'r5':  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        dexterity_start, r5start = r5start, dexterity_start  ###For all of this part: if player wants this roll in this slot then swap variables and display
+                        continue
                 elif stat == 'constitution' or stat == 'con':
                     roll_selector = input('\nWhich roll do you want to put in this stat?\n'
                                           f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}').lower()
                     if roll_selector == 'r1':
                         constitution_start, r1start = r1start, constitution_start
+                        continue
                     if roll_selector == 'r2':
                         constitution_start, r2start = r2start, constitution_start
+                        continue
                     if roll_selector == 'r3':
                         constitution_start, r3start = r3start, constitution_start
+                        continue
                     if roll_selector == 'r4':
                         constitution_start, r4start = r4start, constitution_start
+                        continue
                     if roll_selector == 'r5':
                         constitution_start, r5start = r5start, constitution_start
+                        continue
                     continue
                 elif stat == 'defense' or stat == 'def':
                     roll_selector = input('\nWhich roll do you want to put in this stat?\n'
                                           f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}\n').lower()
                     if roll_selector == 'r1':
                         defense_start, r1start = r1start, defense_start
+                        continue
                     if roll_selector == 'r2':
                         defense_start, r2start = r2start, defense_start
+                        continue
                     if roll_selector == 'r3':
                         defense_start, r3start = r3start, defense_start
+                        continue
                     if roll_selector == 'r4':
                         defense_start, r4start = r4start, defense_start
+                        continue
                     if roll_selector == 'r5':
                         defense_start, r5start = r5start, defense_start
+                        continue
                     continue
                 elif stat == 'charisma' or stat == 'cha':
                     roll_selector = input('\nWhich roll do you want to put in this stat?\n'
                                           f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}\n').lower()
                     if roll_selector == 'r1':
                         charisma_start, r1start = r1start, charisma_start
+                        continue
                     if roll_selector == 'r2':
                         charisma_start, r2start = r2start, charisma_start
+                        continue
                     if roll_selector == 'r3':
                         charisma_start, r3start = r3start, charisma_start
+                        continue
                     if roll_selector == 'r4':
                         charisma_start, r4start = r4start, charisma_start
+                        continue
                     if roll_selector == 'r5':
                         charisma_start, r5start = r5start, charisma_start
+                        continue
                     continue
                 elif stat == 'strength' or stat == 'str':
                     roll_selector = input('\nWhich roll do you want to put in this stat?\n'
                                           f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}\n').lower()
                     if roll_selector == 'r1':
                         strength_start, r1start = r1start, strength_start
+                        continue
                     if roll_selector == 'r2':
                         strength_start, r2start = r2start, strength_start
+                        continue
                     if roll_selector == 'r3':
                         strength_start, r3start = r3start, strength_start
+                        continue
                     if roll_selector == 'r4':
                         strength_start, r4start = r4start, strength_start
+                        continue
                     if roll_selector == 'r5':
                         strength_start, r5start = r5start, strength_start
+                        continue
                     continue
-                elif stat == 'restart': ###Player can reset all rolls to their original values and re allocate stats
+                elif stat == 'restart':  ###Player can reset all rolls to their original values and re allocate stats
                     r1start = r1
                     r2start = r2
                     r3start = r3
@@ -243,25 +273,25 @@ def player_set():
                     stat_selector()
                     continue
                 else:
-                    if r1start + r2start +r3start + r4start + r5start > 0: ###Player can't back out without all stats bein allocated
+                    if r1start + r2start + r3start + r4start + r5start > 0:  ###Player can't back out without all stats bein allocated
                         print('Assign all rolls to stats')
                         continue
                     elif stat == 'exit':
-                        print(f"\nStrength: {strength} (+{strength * 2} melee dmg)" ###Specific buffs per stat
-                              f"\nDexterity: {dexterity} (+{dexterity * 1.5} crit chance) " ###Specific buffs per stat
-                              f"\nCharisma: {charisma} (Used for social checks, 1 dice per point)" ###Specific buffs per stat
-                              f"\nDefense: {defense} (+{defense * 2} damage resistance))" ###Specific buffs per stat
-                              f"\nConstitution: {constitution} ({3 * constitution} bonus health)") ###Specific buffs per stat
+                        print(f"\nStrength: {strength} (+{strength * 2} melee dmg)"  ###Specific buffs per stat
+                              f"\nDexterity: {dexterity} (+{dexterity * 1.5} crit chance) "  ###Specific buffs per stat
+                              f"\nCharisma: {charisma} (Used for social checks, 1 dice per point)"  ###Specific buffs per stat
+                              f"\nDefense: {defense} (+{defense * 2} damage resistance))"  ###Specific buffs per stat
+                              f"\nConstitution: {constitution} ({3 * constitution} bonus health)")  ###Specific buffs per stat
                         final = input(
                             f'Are you sure? You will not be able to change this in the future. <yes or no>\n').lower()
                         if final != 'yes':
                             continue
                         else:
-                            strength_start, strength = strength, strength_start ###Swaps the function stat with the real game one
-                            constitution_start, constitution = constitution, constitution_start ###Swaps the function stat with the real game one
-                            dexterity_start, dexterity = dexterity, dexterity_start ###Swaps the function stat with the real game one
-                            charisma_start, charisma = charisma, charisma_start ###Swaps the function stat with the real game one
-                            defense_start, defense = defense, defense_start ###Swaps the function stat with the real game one
+                            strength_start, strength = strength, strength_start  ###Swaps the function stat with the real game one
+                            constitution_start, constitution = constitution, constitution_start  ###Swaps the function stat with the real game one
+                            dexterity_start, dexterity = dexterity, dexterity_start  ###Swaps the function stat with the real game one
+                            charisma_start, charisma = charisma, charisma_start  ###Swaps the function stat with the real game one
+                            defense_start, defense = defense, defense_start  ###Swaps the function stat with the real game one
                             print(f"\nStrength: {strength} (+{strength * 2} melee dmg)"
                                   f"\nDexterity: {dexterity} (+{dexterity * 1.5} crit chance) "
                                   f"\nCharisma: {charisma} (Used for social checks)"
@@ -269,14 +299,17 @@ def player_set():
                                   f"\nConstitution: {constitution} ({3 * constitution} bonus health)")
                             input('<Enter to continue>')
                             break
+                    elif stat == 'exit':
+                        break
                     print('Enter a valid input')
                     continue
+
         def player_set_light():
             global strength, dexterity, defense, charisma, constitution
             gamble = 0
             while True:
                 if gamble != 3:
-                    strength = random.randint(1, 10) ###Stats all randomly assigned, player gets three rolls.
+                    strength = random.randint(1, 10)  ###Stats all randomly assigned, player gets three rolls.
                     dexterity = random.randint(1, 10)
                     constitution = random.randint(1, 10)
                     defense = random.randint(1, 10)
@@ -287,20 +320,20 @@ def player_set():
                           f"\nDefense: {defense} (+{defense * 2} damage resistance)"
                           f"\nConstitution: {constitution} ({3 * constitution} bonus health)")
                     choice = input(f'Want to re-roll? {3 - gamble} re-rolls left. <yes or no>\n').lower()
-                    if choice == 'yes': ###If player re rolls then they get new stats and the process repeats.
+                    if choice == 'yes':  ###If player re rolls then they get new stats and the process repeats.
                         gamble += 1
-                        if gamble == 3: ###Once the player used all of their rolls they get locked in with the stats seen below
+                        if gamble == 3:  ###Once the player used all of their rolls they get locked in with the stats seen below
                             strength = random.randint(1, 10)
                             dexterity = random.randint(1, 10)
                             constitution = random.randint(1, 10)
                             defense = random.randint(1, 10)
                             charisma = random.randint(1, 10)
                             input(f"\nStrength: {strength} (+{strength * 2} melee dmg)"
-                                 f"\nDexterity: {dexterity} (+{dexterity * 1.5} crit chance) "
-                                 f"\nCharisma: {charisma} (Used for social checks)"
-                                 f"\nDefense: {defense} (+{defense * 2} damage resistance)"
-                                 f"\nConstitution: {constitution} ({3 * constitution} bonus health)"
-                                 f"\nThese are the stats you are stuck with. No more re-rolls.")
+                                  f"\nDexterity: {dexterity} (+{dexterity * 1.5} crit chance) "
+                                  f"\nCharisma: {charisma} (Used for social checks)"
+                                  f"\nDefense: {defense} (+{defense * 2} damage resistance)"
+                                  f"\nConstitution: {constitution} ({3 * constitution} bonus health)"
+                                  f"\nThese are the stats you are stuck with. No more re-rolls.")
                             break
                     elif choice == 'no':
                         break
@@ -308,9 +341,10 @@ def player_set():
                         if choice != 'no' or choice != 'yes':
                             print('<Enter a valid input>')
                             continue
+
         def player_set_auto():
-            global strength, dexterity, defense, charisma, constitution 
-            strength = random.randint(1, 10) ###Automatically assigns all stats
+            global strength, dexterity, defense, charisma, constitution
+            strength = random.randint(1, 10)  ###Automatically assigns all stats
             dexterity = random.randint(1, 10)
             constitution = random.randint(1, 10)
             defense = random.randint(1, 10)
@@ -322,7 +356,7 @@ def player_set():
                   f"\nConstitution: {constitution} ({3 * constitution} bonus health)")
             input('<Enter to continue>')
 
-        if type == 'full': ###These options are for initial imput, selects stat function
+        if type == 'full':  ###These options are for initial imput, selects stat function
             player_set_full()
             break
         if type == 'light':
@@ -336,13 +370,14 @@ def player_set():
                 print('<Choose from the options presented to you>')
                 continue
 
+
 def cha_check(player_skill, enemy_skill_score, name):
-    def char_stat (enemy_skill_score): ###Calculates the enemy skill check score
+    def char_stat(enemy_skill_score):  ###Calculates the enemy skill check score
         character_total = (enemy_skill_score * 3.5)
         print('Enemy skill:', int(character_total))
         return character_total
 
-    def roll(player_skill): ###Generates player skill check
+    def roll(player_skill):  ###Generates player skill check
         results = [random.randint(1, 6) for n in range(player_skill)]
         print(f'Player skill: {sum(results)}')
         return sum(results)
@@ -363,6 +398,7 @@ def cha_check(player_skill, enemy_skill_score, name):
     check = checker(player, ai)
     return check
 
+
 def fight_loop(modifier):
     global distance, enemy_hp, hp, shotgun_shell_count, stamina, distance, damage_given, damage_taken
     global equipped_weapon, pistol_ammo_count, rifle_ammo_count, secondary, money, bandages
@@ -379,7 +415,7 @@ def fight_loop(modifier):
             current_ammo = pistol_ammo_count
         else:
             current_ammo = 'N/A'
-        hud = {'Enemy HP': enemy_hp, 'Player HP': hp, 'Current weapon': equipped_weapon, 'Secondary' : secondary,
+        hud = {'Enemy HP': enemy_hp, 'Player HP': hp, 'Current weapon': equipped_weapon, 'Secondary': secondary,
                'Ammo': current_ammo, 'Distance': distance, 'Stamina': stamina}
         print(f'\n  	    ಠ_ಠ\n    	<|>\n    	/ \\\n O\n<|>\n/ \\\n')
         pretty_dict(hud)
@@ -521,8 +557,7 @@ def fight_loop(modifier):
                     continue
                 else:
                     stabs = [random.randint(5, 15) for stabbies in range(2)]
-                    print(stabs)
-                    given_damage = sum(stabs)
+                    damage_given = sum(stabs)
 
             elif equipped_weapon == 'hatchet':
                 if distance >= 2:
@@ -550,7 +585,6 @@ def fight_loop(modifier):
         else:
             damage_taken = (random.randint(0, 25) - defense)
             damage_taken += (int(modifier) * 1.25)
-
 
         if damage_given > 0 and damage_taken > 0:
             input(f'You dealt {damage_given} damage and took {int(damage_taken)} damage! \n<Enter to continue>')
@@ -584,6 +618,7 @@ def fight_loop(modifier):
         money += money_up
         input(f'You killed the enemy and found ${money_up} on their body.')
 
+
 def shopping_guns():
     global hp, shotgun_shell_count, money, bandages, pistol_ammo_count, rifle_ammo_count, equipped_weapon, secondary
     bandage_cost = random.randint(25, 150)
@@ -593,26 +628,29 @@ def shopping_guns():
     shotgun_shell_cost = random.randint(10, 30)
     shotgun_cost = random.randint(120, 250)
     rifle_cost = random.randint(100, 225)
-    pistol_cost = random.randint(80,200)
+    pistol_cost = random.randint(80, 200)
     while True:
-        goods = input('Doctor: "What do you need? Since you just healed, I\'ll offer you some extra items!\nPrices are:\n'
-                      f'Bandages for ${bandage_cost} dollars'
-                      f'\nI can heal 40-100 hp you for ${healing_cost}. (120 HP limit).'
-                      f'\nPistol rounds for ${pistol_ammo_cost} per round\nA pistol for ${pistol_cost}'
-                      f'\nRifle rounds for ${rifle_ammo_cost} per round\nA rifle for ${rifle_cost}'
-                      f'\nShotgun shells for ${shotgun_shell_cost} per shell\nA shotgun for ${shotgun_cost}"'
-                      f'\nMoney: ${money}\n<(Heal) me, bandages, ammo, shotgun, rifle, pistol or exit>\n').lower()
+        goods = input(
+            'Doctor: "What do you need? Since you just healed, I\'ll offer you some extra items!\nPrices are:\n'
+            f'Bandages for ${bandage_cost} dollars'
+            f'\nI can heal 40-100 hp you for ${healing_cost}. (120 HP limit).'
+            f'\nPistol rounds for ${pistol_ammo_cost} per round\nA pistol for ${pistol_cost}'
+            f'\nRifle rounds for ${rifle_ammo_cost} per round\nA rifle for ${rifle_cost}'
+            f'\nShotgun shells for ${shotgun_shell_cost} per shell\nA shotgun for ${shotgun_cost}"'
+            f'\nMoney: ${money}\n<(Heal) me, bandages, ammo, shotgun, rifle, pistol or exit>\n').lower()
         if goods == 'heal' or goods == 'heal me':
             health_up = random.randint(40, 100)
             hp += health_up
             if hp > 120:
                 hp = 120
             money -= healing_cost
-            input(f'I managed to heal you for {health_up} health. Your new HP is {hp} and you have ${money}. \n<Enter to continue>')
+            input(
+                f'I managed to heal you for {health_up} health. Your new HP is {hp} and you have ${money}. \n<Enter to continue>')
             continue
         elif goods == 'bandages':
             bandage_cap = money // bandage_cost
-            bandage_amount = input(f'How many? You can afford {bandage_cap} bandages. Type \'back\' to go back.').lower()
+            bandage_amount = input(
+                f'How many? You can afford {bandage_cap} bandages. Type \'back\' to go back.').lower()
             if bandage_amount == 'back':
                 continue
             bandage_price = int(bandage_amount) * bandage_cost
@@ -642,7 +680,8 @@ def shopping_guns():
                         print(f'Doctor: "You can only afford {pistol_cap} pistol rounds."')
                         continue
                     else:
-                        double = input(f'You are about to spend ${pistol_price} on ammo. Are you sure?\n<Yes or no>').lower()
+                        double = input(
+                            f'You are about to spend ${pistol_price} on ammo. Are you sure?\n<Yes or no>').lower()
                         if double == 'no':
                             continue
                         else:
@@ -653,7 +692,7 @@ def shopping_guns():
                 elif gun == 'shotgun':
                     shotgun_cap = money // shotgun_shell_cost
                     shotgun_amount = input(f'How many? You can afford {shotgun_cap} \nType \'back\' to go back.'
-                    f'or enter a number.').lower()
+                                           f'or enter a number.').lower()
                     if shotgun_amount == 'back':
                         continue
                     else:
@@ -668,13 +707,15 @@ def shopping_guns():
                         else:
                             money -= shotgun_price
                             shotgun_shell_count += int(shotgun_amount)
-                            input(f'You now have {shotgun_shell_count} Shotgun shells and ${money}  \n<Enter to continue>').lower()
+                            input(
+                                f'You now have {shotgun_shell_count} Shotgun shells and ${money}  \n<Enter to continue>').lower()
                             continue
 
                 elif gun == 'rifle':
-                    rifle_cap = money //rifle_ammo_cost
-                    rifle_amount = input(f'How many? You can only afford {rifle_cap} rifle rounds.\nType \'back\' to go back.'
-                    f'or enter a number.').lower()
+                    rifle_cap = money // rifle_ammo_cost
+                    rifle_amount = input(
+                        f'How many? You can only afford {rifle_cap} rifle rounds.\nType \'back\' to go back.'
+                        f'or enter a number.').lower()
                     if rifle_amount == 'back':
                         continue
                     rifle_price = (int(rifle_amount) * rifle_ammo_cost)
@@ -688,7 +729,8 @@ def shopping_guns():
                         else:
                             money -= rifle_price
                             rifle_ammo_count += int(rifle_amount)
-                            input(f'Rifle rounds now at {rifle_ammo_count} and money at ${money}  \n<Enter to continue>').lower()
+                            input(
+                                f'Rifle rounds now at {rifle_ammo_count} and money at ${money}  \n<Enter to continue>').lower()
                             continue
                 else:
                     if gun == 'back':
@@ -770,6 +812,8 @@ def shopping_guns():
                 else:
                     print('<Enter a valid input>')
             input('<Enter a valid input>')
+
+
 def shopping():
     global hp, shotgun_shell_count, money, bandages, pistol_ammo_count, rifle_ammo_count
     bandage_cost = random.randint(75, 150)
@@ -913,8 +957,6 @@ def shopping():
                     print('<Enter a valid input>')
 
 
-
-
 strength = 0
 dexterity = 0
 defense = 0
@@ -933,15 +975,13 @@ damage_taken = 0
 damage_given = 0
 hp = 60
 
-
-
 while True:
     answer = input('   W E L C O M E\n'
                    ' A D V E N T U R E R'
                    '\n\n\nStart a new game or view items?'
                    '\n<Start or items>\n').lower()
     if answer == 'items':
-        item_manager()     
+        item_manager()
     else:
         if answer == 'start':
             break
@@ -949,8 +989,8 @@ while True:
             input('We are not off to a very good start if you can\'t follow simple instructions. \n<Enter to continue>')
 name = input("Hello adventurer, what's your name? People call me the nurse.\n")
 print(f'Nurse: "It\'s good to meet you, {name}. Have you allocated your stats yet? No?! It\'s kind of fun to'
-             f' gamble your stats, you should try it!\nYou get random skill sets up to 3 times and get to decide if you want'
-             f' to keep that skill set or re-roll! That\'s light customization!"')
+      f' gamble your stats, you should try it!\nYou get random skill sets up to 3 times and get to decide if you want'
+      f' to keep that skill set or re-roll! That\'s light customization!"')
 
 player_set()
 
@@ -958,13 +998,13 @@ while True:
     print('\nNurse: "There you go, good as new. What do you want to do now?"'
           "\n<Seduce Character, CHA 3>"
           "\n<Wait>")
-    seduce = input (f'\nYou are given multiple options to choose from in most encounters.'
-          f' The command to execute the option is listed in <these> at the bottom of your screen.'
-          f'\nThis character is able to be seduced! When you see the <seduce character> prompt, you can seduce that character.'
-          f'\nCharisma checks are done by comparing the AI charisma score against yours. You get one die per charisma'
-          f' level and have to roll the minimum skill check to pass!\n'
-          f'Skill-checked dialogue options can reveal new items, or choices.Try it now by typing \'seduce\' and pressing enter!\n'
-          f'<Seduce or wait>\n').lower()
+    seduce = input(f'\nYou are given multiple options to choose from in most encounters.'
+                   f' The command to execute the option is listed in <these> at the bottom of your screen.'
+                   f'\nThis character is able to be seduced! When you see the <seduce character> prompt, you can seduce that character.'
+                   f'\nCharisma checks are done by comparing the AI charisma score against yours. You get one die per charisma'
+                   f' level and have to roll the minimum skill check to pass!\n'
+                   f'Skill-checked dialogue options can reveal new items, or choices.Try it now by typing \'seduce\' and pressing enter!\n'
+                   f'<Seduce or wait>\n').lower()
     if seduce == 'seduce':
         check = cha_check(charisma, 3, 'Nurse')
         if check == 'pass':
@@ -997,23 +1037,25 @@ while money == 0:
             money = 150
             break
         else:
-             choice = 'no'
+            choice = 'no'
     if choice == 'no':
-        print('Doctor: "Monsters are attacking! You got brought in here with some weapons so I assumed you were supposed to do '
-              'something about that." \n"Here are your things back. Oh, don\'t forget to pay your bills!" \n + $50 ')
+        print(
+            'Doctor: "Monsters are attacking! You got brought in here with some weapons so I assumed you were supposed to do '
+            'something about that." \n"Here are your things back. Oh, don\'t forget to pay your bills!" \n + $50 ')
         money = 50
         break
     input('<Enter a valid input>')
 
 print(f'\nDoctor: "Looks here like you came in with...if I could just find them..."')
-print('Your possible weapon choices are',', '.join(weapon_list[:-1]) + ', or ' + weapon_list[-1])
+print('Your possible weapon choices are', ', '.join(weapon_list[:-1]) + ', or ' + weapon_list[-1])
 input('<Enter to continue>')
 primary_start = ['rifle', 'shotgun', 'pistol', 'pistol', 'rifle', 'pistol', 'pistol', 'rifle']
-equipped_weapon  = random.choice(primary_start)
-secondary_start = ['knife', 'knife' 'knife', 'knife', 'knife', 'axe', 'hatchet',  'hatchet', 'hatchet']
+equipped_weapon = random.choice(primary_start)
+secondary_start = ['knife', 'knife' 'knife', 'knife', 'knife', 'axe', 'hatchet', 'hatchet', 'hatchet']
 secondary = random.choice(secondary_start)
-print(f'\n\nDoctor: "Hah! Found them! Looks like you had a {equipped_weapon} and {secondary} when you got brought here. Looks like you'
-      f' also had a bag of ammo with you too! all sorts of sizes and shapes!')
+print(
+    f'\n\nDoctor: "Hah! Found them! Looks like you had a {equipped_weapon} and {secondary} when you got brought here. Looks like you'
+    f' also had a bag of ammo with you too! all sorts of sizes and shapes!')
 pistol_ammo_count = random.randint(10, 25)
 rifle_ammo_count = random.randint(7, 25)
 shotgun_shell_count = random.randint(4, 10)
@@ -1035,8 +1077,8 @@ while True:
             continue
 
     if fight == 'shop':
-            shopping()
-            break
+        shopping()
+        break
     else:
         print('<Enter a valid input>')
 
@@ -1073,6 +1115,3 @@ if cont == 'yes':
             input(f'You did well. {kills} kills is impressive. Until next time, {name}')
             sys.quit
         shopping()
-
-
-
