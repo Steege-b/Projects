@@ -34,82 +34,99 @@ def item_manager():
         info = (', '.join(list[:-1]) + ', or ' + list[
             -1])  ###Print everything before the last item in the list, separated by commas.
         return info
+    while True:
+        cat = input('What category do you want? Type \'Exit\' to quit.'
+                    f'\nWeapons'
+                    f'\nArmor\n').lower() ###Getting item category
+        if cat == 'weapons':
+            cat = ''
+            while True:###This page displays stats about your selected weapon
+                weapon = input('Which weapon? Type \'back\' to go back.'
+                               f'\nChoose from one of the following: {manager_sorter(weapon_list)}\n')
+                if weapon == 'shotgun':
+                    print('The shotgun with buckshot ammo deals 0-7 damage, 10 on headshots, 7 times. it gets added up'
+                          ' for a total damage output. The slug rounds in a shotgun will deal 15-40 damage, 50 on a'
+                          ' headshot. \nThe shotgun can shoot from 2-3 distance')
+                    continue
+                elif weapon == 'rifle':
+                    print('The rifle deals 0-25 damage, 40 on a headshot, and can shoot from 2-10 distance.')
+                    continue
+                elif weapon == 'pistol':
+                    print('The pistol deals 0-15 damage, 25 on a headshot, and can shoot from 1-5 distance.')
+                    continue
+                elif weapon == 'knife':
+                    print('The knife deals 0-10 damage, 20 on a critical hit, two times and has a range of 1.')
+                    continue
+                elif weapon == 'axe':
+                    print('The axe deals 10-30 damage, 45 on a critical hit, and has a range of 2.')
+                    continue
+                elif weapon == 'hatchet':
+                    print('The hatchet deals 10-25 damage, 35 on a critical hit, and has a range of 1. ')
+                    continue
+                elif weapon == 'back':
+                    break
 
-    cat = input('What category do you want? Type \'Exit\' to quit.'
-                f'\nWeapons'
-                f'\nArmor\n').lower() ###Getting item category
-    if cat == 'weapons':
-        while True:###This page displays stats about your selected weapon
-            weapon = input('Which weapon? Type \'back\' to go back.'
-                           f'\nChoose from one of the following: {manager_sorter(weapon_list)}\n')
-            if weapon == 'shotgun':
-                print('The shotgun with buckshot ammo deals 0-7 damage, 10 on headshots, 7 times. it gets added up'
-                      ' for a total damage output. The slug rounds in a shotgun will deal 15-40 damage, 50 on a'
-                      ' headshot. \nThe shotgun can shoot from 2-3 distance')
-            elif weapon == 'rifle':
-                print('The rifle deals 0-25 damage, 40 on a headshot, and can shoot from 2-10 distance.')
-            elif weapon == 'pistol':
-                print('The pistol deals 0-15 damage, 25 on a headshot, and can shoot from 1-5 distance.')
-            elif weapon == 'knife':
-                print('The knife deals 0-10 damage, 20 on a critical hit, two times and has a range of 1.')
-            elif weapon == 'axe':
-                print('The axe deals 10-30 damage, 45 on a critical hit, and has a range of 2.')
-            elif weapon == 'hatchet':
-                print('The hatchet deals 10-25 damage, 35 on a critical hit, and has a range of 1. ')
-                continue
-            else:
-                if weapon == 'back':
-                    item_manager()
                 print('<Enter a valid input>')
-    if cat == 'armor':  ###Giving stats about armor. asks for armomr class first
-        while True:
-            sub_cat = input('Head, body, or leg armor? Type \'back\' to go back.')
-            if sub_cat == 'head' or sub_cat == 'head armor':
-                print(manager_sorter(head_armor))
-                head = input('Which piece?').lower()
-                if head == 'bandanna':
-                    print('Light armor, +1 CON')
-                elif head == 'fedora':
-                    print('Medium armor, +5 CHA +1 DEX')
-                elif head == 'hard hat':
-                    print('Heavy armor, +1 CON & DEF')
-                else:
-                    print('<Enter a valid input>')
-            elif sub_cat == 'body' or sub_cat == 'body armor':
-                print(manager_sorter(body_armor))
-                body = input('Which piece?')
-                if body == 'apron':
-                    print('Light armor, +2 DEX ')
-                if body == 'jacket':
-                    print('Medium armor, +2 STR')
-                if body == 'football pads':
-                    print('Heavy armor, +2 DEF +1 CON ')
-                else:
-                    print('<Enter a valid input>')
+        elif cat == 'armor':  ###Giving stats about armor. asks for armomr class first
+            cat = ''
+            while True:
+                sub_cat = input('Head, body, or leg armor? Type \'back\' to go back.')
+                if sub_cat == 'head' or sub_cat == 'head armor':
+                    print(manager_sorter(head_armor))
+                    head = input('Which piece?').lower()
+                    if head == 'bandanna':
+                        print('Light armor, +1 CON')
+                        continue
+                    elif head == 'fedora':
+                        print('Medium armor, +5 CHA +1 DEX')
+                        continue
+                    elif head == 'hard hat':
+                        print('Heavy armor, +1 CON & DEF')
+                        continue
+                    else:
+                        print('<Enter a valid input>')
+                elif sub_cat == 'body' or sub_cat == 'body armor':
+                    print(manager_sorter(body_armor))
+                    body = input('Which piece?')
+                    if body == 'apron':
+                        print('Light armor, +2 DEX ')
+                        continue
+                    if body == 'jacket':
+                        print('Medium armor, +2 STR')
+                        continue
+                    if body == 'football pads':
+                        print('Heavy armor, +2 DEF +1 CON ')
+                        continue
+                    else:
+                        print('<Enter a valid input>')
 
-            elif sub_cat == 'leg' or sub_cat == 'leg armor':
-                print(manager_sorter(leg_armor))
-                body = input('Which piece?')
-                if body == 'jeggings':
-                    print('Light armor, +2 DEF ')
-                if body == 'jnco jeans':
-                    print('Medium armor, +2 CON')
-                if body == 'carhart pants ':
-                    print('Heavy armor, +2 STR +1 DEX ')
-                else:
-                    print('<Enter a valid input>')
+                elif sub_cat == 'leg' or sub_cat == 'leg armor':
+                    print(manager_sorter(leg_armor))
+                    body = input('Which piece?')
+                    if body == 'jeggings':
+                        print('Light armor, +2 DEF ')
+                        continue
+                    if body == 'jnco jeans':
+                        print('Medium armor, +2 CON')
+                        continue
+                    if body == 'carhart pants ':
+                        print('Heavy armor, +2 STR +1 DEX ')
+                        continue
+                    else:
+                        print('<Enter a valid input>')
 
-            else:
-                if sub_cat == 'back':
-                    item_manager()
                 else:
-                    print('<Enter a valid input>') ###Giving stats abou
-    else:
-        if cat == 'exit':
-            pass
-        else:
+                    if sub_cat == 'back':
+                        break
+                    else:
+                        print('<Enter a valid input>')
+                        continue###Giving stats abou
+        elif cat == 'exit':
+            return ''
+        elif cat != 'exit' or cat != 'weapons' or cat != 'armor':
             print('<Enter a valid input>')
-            item_manager()
+            continue
+
 
 def player_set():
     global strength, dexterity, charisma, defense, constitution
