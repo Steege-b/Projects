@@ -185,7 +185,7 @@ def player_set():
                         continue
                 elif stat == 'constitution' or stat == 'con':
                     roll_selector = input('\nWhich roll do you want to put in this stat?\n'
-                                          f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}').lower()
+                                          f'R1: {r1start}    R2: {r2start}    R3: {r3start}    R4: {r4start}    R5: {r5start}\n').lower()
                     if roll_selector == 'r1':
                         constitution_start, r1start = r1start, constitution_start
                         continue
@@ -626,20 +626,21 @@ def fight_loop(modifier):
             input('No damage dealt this turn \n<Enter to continue>')
         damage_given = 0
         damage_taken = 0
-    if enemy_hp < 1:
-        money_up = random.randint(10, 100)
-        ammo_up = random.randint(-3, 7)
-        if ammo_up < 0:
-            ammo_up = 0
-        current_ammo += ammo_up
-        if equipped_weapon == 'shotgun':
-            shotgun_shell_count += ammo_up
-        elif equipped_weapon == 'rifle':
-            rifle_ammo_count += ammo_up
-        elif equipped_weapon == 'pistol':
-            pistol_ammo_count += ammo_up
-        money += money_up
-        input(f'You killed the enemy and found ${money_up} and scavenged {ammo_up} bullets off of their body.')
+
+        if enemy_hp < 1:
+            money_up = random.randint(10, 100)
+            ammo_up = int(random.randint(1, 7))
+            if ammo_up < 0:
+                ammo_up = 0
+            current_ammo += int(ammo_up)
+            if equipped_weapon == 'shotgun':
+                shotgun_shell_count += int(ammo_up)
+            elif equipped_weapon == 'rifle':
+                rifle_ammo_count += int(ammo_up)
+            elif equipped_weapon == 'pistol':
+                pistol_ammo_count += int(ammo_up)
+            money += money_up
+            input(f'You killed the enemy and found ${money_up} and scavenged {ammo_up} bullets off of their body.')
 
 
 def shopping_guns():
