@@ -36,8 +36,7 @@ def pretty_dict(dict):
 
 def item_manager():
     def manager_sorter(list):
-        info = (', '.join(list[:-1]) + ', or ' + list[
-            -1])  ###Print everything before the last item in the list, separated by commas.
+        info = (', '.join(list[:-1]) + ', or ' + list[-1])  ###Print everything before the last item in the list, separated by commas.
         return info
 
     while True:
