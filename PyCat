@@ -33,7 +33,7 @@ class Pycat:
             self.send()
 
     def send(self):
-        self.socket.connect((self.args.target, self.args.port))  ###Connect to host and port
+        self.socket.connect((self.args.target, int(self.args.port)))  ###Connect to host and port
         if self.buffer:
             self.socket.send(self.buffer)  ###If the buffer contains data, send it
         try:
@@ -58,12 +58,15 @@ class Pycat:
 
     def listen(self):
         self.socket.bind((self.args.target, int(self.args.port)))  ###bind to host and port
+        print(f'Listener started on {self.args.target}:{self.args.port}')
         self.socket.listen(5)  ###Accept up to five connections
         while True:  ###Listen in a loop
             client_socket, _ = self.socket.accept()
             client_thread = threading.Thread(target=self.handle,
                                              args=(client_socket,))  ###Pass client socket to handler
             client_thread.start()
+            chost, cport = client_socket.getpeername()
+            print(f'Thread started for client on {chost}:{cport}')
 
     def handle(self, client_socket):  ###Client Handler
         if self.args.execute:  ###If -e was chosen, execute command
@@ -124,4 +127,3 @@ if __name__ == '__main__':
         buffer = sys.stdin.read()  ###If there is no listener, use standard input
     PC = Pycat(args, buffer.encode())
     PC.run()
-
