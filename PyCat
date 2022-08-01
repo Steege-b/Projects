@@ -57,11 +57,12 @@ class Pycat:
             sys.exit()
 
     def listen(self):
-        self.socket.bind((self.args.target, self.args.port))  ###bind to host and port
+        self.socket.bind((self.args.target, int(self.args.port)))  ###bind to host and port
         self.socket.listen(5)  ###Accept up to five connections
         while True:  ###Listen in a loop
             client_socket, _ = self.socket.accept()
-            client_thread = threading.Thread(target=self.handle, args=(client_socket,))  ###Pass client socket to handler
+            client_thread = threading.Thread(target=self.handle,
+                                             args=(client_socket,))  ###Pass client socket to handler
             client_thread.start()
 
     def handle(self, client_socket):  ###Client Handler
@@ -77,7 +78,8 @@ class Pycat:
                     file_buffer += data
                 else:
                     break  ###If no more data is being received, break loop
-            with open(self.args.upload, 'wb') as file: ###Use Open and 'wb' to specify a new file that you write binary to
+            with open(self.args.upload,
+                      'wb') as file:  ###Use Open and 'wb' to specify a new file that you write binary to
                 file.write(file_buffer)
                 message = f'Saved file as {self.args.upload}'
                 client_socket.send(message.encode())
@@ -122,3 +124,4 @@ if __name__ == '__main__':
         buffer = sys.stdin.read()  ###If there is no listener, use standard input
     PC = Pycat(args, buffer.encode())
     PC.run()
+
