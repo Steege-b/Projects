@@ -1,0 +1,129 @@
+import argparse
+import shlex
+import socket
+import subprocess
+import sys
+import textwrap
+import threading
+
+
+def execute(cmd):
+    cmd = cmd.strip()  ###Remove whitespace from cmd variable
+    if not cmd:
+        return
+    output = subprocess.check_output(shlex.split(cmd), stderr=subprocess.STDOUT)
+    ###The output variable will be used to run the command (cmd). Shlex is used to parse the output of the command in to arguments
+    return output.decode()  ###Decode output
+
+
+class Pycat:
+    def __init__(self, args, buffer=None):
+        ###Creates a class named Pycat with the attributes of self, args, and buffer. Buffer will default to empty if no parameter is passed
+        self.args = args
+        self.buffer = buffer
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  ###Create IPV4 TCP Socket
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        ###SOL_Socket specifies that we are configuring options at the socket level (setsockopt).
+        ###REUSEADDR specifies that we can reuse our local address. Boolean value
+
+    def run(self):  ###If -l is applied, listen. If not, send data.
+        if self.args.listen:
+            self.listen()
+        else:
+            self.send()
+
+    def send(self):
+        self.socket.connect((self.args.target, int(self.args.port)))  ###Connect to host and port
+        if self.buffer:
+            self.socket.send(self.buffer)  ###If the buffer contains data, send it
+        try:
+            while True:  ###Create a loop to listen for data from host.
+                received_length = 1
+                response = ''
+                while received_length:
+                    data = self.socket.recv(4096)
+                    received_length = len(data)
+                    response += data.decode()
+                    if received_length < 4096:  ###If there is no more data, break out of the loop
+                        break
+                    if response:  ###Print received data and repeat the loop
+                        print(response)
+                        buffer = input('> ')
+                        buffer += '\n'
+                        self.socket.send(buffer.encode())
+        except KeyboardInterrupt:  ###Allows us to end sessions using ctrl+c
+            print('User ended the session')
+            self.socket.close()
+            sys.exit()
+
+    def listen(self):
+        self.socket.bind((self.args.target, int(self.args.port)))  ###bind to host and port
+        print(f'Listener started on {self.args.target}:{self.args.port}')
+        self.socket.listen(5)  ###Accept up to five connections
+        while True:  ###Listen in a loop
+            client_socket, _ = self.socket.accept()
+            client_thread = threading.Thread(target=self.handle,
+                                             args=(client_socket,))  ###Pass client socket to handler
+            client_thread.start()
+            chost, cport = client_socket.getpeername()
+            print(f'Thread started for client on {chost}:{cport}')
+
+    def handle(self, client_socket):  ###Client Handler
+        if self.args.execute:  ###If -e was chosen, execute command
+            output = execute(self.args.execute)
+            client_socket.send(output.encode())  ###Send output to socket
+
+        elif self.args.upload:  ###If -u was chosen, create a buffer for the file and add the data to it
+            file_buffer = b''
+            while True:
+                data = client_socket.recv(4096)
+                if data:
+                    file_buffer += data
+                else:
+                    break  ###If no more data is being received, break loop
+            with open(self.args.upload,
+                      'wb') as file:  ###Use Open and 'wb' to specify a new file that you write binary to
+                file.write(file_buffer)
+                message = f'Saved file as {self.args.upload}'
+                client_socket.send(message.encode())
+
+        elif self.args.command:
+            cmd_buffer = b''
+            while True:
+                try:
+                    client_socket.send(b'Pycat [*]: ')
+                    while '\n' not in cmd_buffer.decode():
+                        cmd_buffer += client_socket.recv(64)
+                    response = execute(cmd_buffer.decode())  ###return output to user
+                    if response:
+                        client_socket.send(response.encode())
+                        cmd_buffer = b''
+                except Exception as e:
+                    print(f'Server killed {e}')
+                    self.socket.close()
+                    sys.exit()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='PyCat by Braxton', formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent("Examples:\n"  ###Examples that display if user types --help
+                               "    Pycat.py -t 192.168.1.10 -p 1234 -l -c  [*] Opens a command shell\n"
+                               "    Pycat.py -t 192.168.1.10 -p 1234 -l -u=mytest.txt [*] uploads output to a file\n"
+                               "    Pycat.py -t 192.168.1.10 -p 1234 -l -e='cat etc/passwd' [*] Run commands\n"
+                               "    echo 'ABC' | ./Pycat.py -t 192.168.1.10 -p 1234 [*] Echo text on specified host/port \n"
+                               "    Pycat.py -t 192.168.1.10 -p 1234 [*] Connect to host/port"))
+    parser.add_argument('-c', '--command', action='store_true', help='Opens a command shell')
+    parser.add_argument('-u', '--upload', help='Upload to specified file')
+    parser.add_argument('-e', '--execute', help='Execute specified Command')
+    parser.add_argument('-l', '--listen', action='store_true', help='Create a listener')
+    parser.add_argument('-p', '--port', help='Specifies port to target')
+    parser.add_argument('-t', '--target', help='Specifies host to target')
+    ###Creating arguments for the script
+    args = parser.parse_args()
+    if args.listen:  ###If the listener is set up, keep buffer clear
+        buffer = ''
+    else:
+        buffer = sys.stdin.read()  ###If there is no listener, use standard input
+    PC = Pycat(args, buffer.encode())
+    PC.run()
